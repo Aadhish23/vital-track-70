@@ -75,13 +75,13 @@ export const Login: React.FC = () => {
             <Activity className="w-8 h-8 text-primary" />
           </div>
           <h1 className="text-3xl font-bold text-foreground mb-2">BP Monitor</h1>
-          <p className="text-muted-foreground">IoT Blood Pressure Monitoring System</p>
+          <p className="text-muted-foreground">Blood Pressure Monitoring System</p>
         </div>
 
         <Card variant="glass" className="fade-in" style={{ animationDelay: '0.1s' }}>
           <CardHeader className="text-center pb-4">
             <CardTitle className="text-xl">Welcome Back</CardTitle>
-            <CardDescription>Select your role to continue</CardDescription>
+            <CardDescription>Select your role</CardDescription>
           </CardHeader>
           
           <CardContent className="space-y-6">
