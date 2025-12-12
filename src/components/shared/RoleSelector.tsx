@@ -8,11 +8,12 @@ interface RoleSelectorProps {
   onRoleChange: (role: UserRole) => void;
 }
 
-const roles: { value: UserRole; label: string; icon: React.ElementType; description: string }[] = [
-  { value: 'clinic', label: 'Clinic', icon: Building2, description: 'Healthcare provider' },
-  { value: 'patient', label: 'Patient', icon: User, description: 'Monitor your health' },
-  { value: 'family', label: 'Family', icon: Users, description: 'Caregiver access' },
+const roles: { value: UserRole; label: string; icon: React.ElementType }[] = [
+  { value: 'clinic', label: 'Clinic', icon: Building2 },
+  { value: 'patient', label: 'Patient', icon: User },
+  { value: 'family', label: 'Family', icon: Users },
 ];
+
 
 export const RoleSelector: React.FC<RoleSelectorProps> = ({ selectedRole, onRoleChange }) => {
   return (
