@@ -68,8 +68,8 @@ export const Login: React.FC = () => {
   const showEmailLogin = selectedRole !== 'clinic';
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4">
-      <div className="w-full max-w-md">
+    <div className="min-h-screen flex items-start justify-center p-4 bg-background pt-10">
+      <div className="w-full max-w-md mx-auto">
         <div className="text-center mb-8 fade-in">
           <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-primary/20 mb-4 pulse-glow">
             <Activity className="w-8 h-8 text-primary" />
