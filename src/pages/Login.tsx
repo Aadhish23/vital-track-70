@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Activity, Mail, Calendar, Loader2, AlertCircle } from 'lucide-react';
+
 import {
   Card,
   CardContent,
@@ -11,12 +12,14 @@ import {
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
+
 import { RoleSelector } from '@/components/shared/RoleSelector';
 import { GoogleLoginButton } from '@/components/shared/GoogleLoginButton';
+
 import { useAuth } from '@/contexts/AuthContext';
 import { UserRole } from '@/types/auth';
 
-export const Login: React.FC = () => {
+const Login: React.FC = () => {
   const navigate = useNavigate();
   const {
     login,
@@ -33,6 +36,7 @@ export const Login: React.FC = () => {
   const [dob, setDob] = useState('');
   const [validationError, setValidationError] = useState<string | null>(null);
 
+  /* -------------------- Effects -------------------- */
   useEffect(() => {
     if (isAuthenticated && user) {
       navigate(user.role === 'clinic' ? '/clinic' : '/dashboard');
@@ -44,12 +48,14 @@ export const Login: React.FC = () => {
     setValidationError(null);
   }, [selectedRole, clearError]);
 
+  /* -------------------- Validation -------------------- */
   const validateEmail = (email: string) =>
     /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
   const validateDOB = (dob: string) =>
     /^(0[1-9]|[12][0-9]|3[01])(0[1-9]|1[012])\d{4}$/.test(dob);
 
+  /* -------------------- Handlers -------------------- */
   const handleEmailLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setValidationError(null);
@@ -71,6 +77,7 @@ export const Login: React.FC = () => {
     await loginWithGoogle(selectedRole);
   };
 
+  /* -------------------- UI -------------------- */
   return (
     <div className="min-h-screen flex items-start justify-center bg-background pt-10 px-4">
       <div className="w-full max-w-md mx-auto">
@@ -86,13 +93,14 @@ export const Login: React.FC = () => {
         </div>
 
         {/* Card */}
-        <Card variant="glass" className="w-full mx-auto">
+        <Card variant="glass">
           <CardHeader className="text-center pb-4">
             <CardTitle className="text-xl">Welcome Back</CardTitle>
             <CardDescription>Select your role</CardDescription>
           </CardHeader>
 
           <CardContent className="space-y-6">
+            {/* Role Selector */}
             <RoleSelector
               selectedRole={selectedRole}
               onRoleChange={setSelectedRole}
@@ -112,16 +120,15 @@ export const Login: React.FC = () => {
 
             {/* ================= ROLE CONTENT ================= */}
             {selectedRole === 'clinic' ? (
-              /* 🔹 Compact clinic layout */
-              <div className="flex justify-center py-4">
-                <GoogleLoginButton
-                  onClick={handleGoogleLogin}
-                  isLoading={isLoading}
-                />
-              </div>
+              /* Clinic → Google only */
+              <GoogleLoginButton
+                onClick={handleGoogleLogin}
+                isLoading={isLoading}
+                role="clinic"
+              />
             ) : (
               <>
-                {/* Email + DOB Form */}
+                {/* Email + DOB */}
                 <form onSubmit={handleEmailLogin} className="space-y-4">
                   <div className="space-y-2">
                     <Label>Email</Label>
@@ -163,9 +170,9 @@ export const Login: React.FC = () => {
 
                   <Button
                     type="submit"
-                    className="w-full bg-cyan-500 hover:bg-cyan-600 text-white"
                     size="lg"
                     disabled={isLoading}
+                    className="w-full bg-cyan-500 hover:bg-cyan-600 text-white"
                   >
                     {isLoading ? (
                       <>
@@ -191,17 +198,15 @@ export const Login: React.FC = () => {
                 </div>
 
                 {/* Google */}
-                <Button
-                  variant="outline"
-                  className="w-full py-6"
+                <GoogleLoginButton
                   onClick={handleGoogleLogin}
-                  disabled={isLoading}
-                >
-                  Continue with Google
-                </Button>
+                  isLoading={isLoading}
+                  role={selectedRole}
+                />
               </>
             )}
 
+            {/* Errors */}
             {(error || validationError) && (
               <div className="flex items-center gap-2 p-3 rounded-lg bg-destructive/10 border border-destructive/30">
                 <AlertCircle className="w-5 h-5 text-destructive" />
