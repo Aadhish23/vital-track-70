@@ -107,6 +107,12 @@ export default {
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
       },
+      boxShadow: {
+        'card': 'var(--shadow-card)',
+        'elevation-sm': 'var(--shadow-sm)',
+        'elevation-md': 'var(--shadow-md)',
+        'elevation-lg': 'var(--shadow-lg)',
+      },
     },
   },
   plugins: [require("tailwindcss-animate")],
