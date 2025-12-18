@@ -1,7 +1,17 @@
 import React from 'react';
-import { Activity, Bell, LogOut, Settings, User } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+
+/* Icons */
+import {
+  Activity,
+  Bell,
+  LogOut,
+  Settings,
+  User,
+} from 'lucide-react';
+
+/* UI Components */
 import { Button } from '@/components/ui/button';
-import { useAuth } from '@/contexts/AuthContext';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -10,7 +20,9 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { useNavigate } from 'react-router-dom';
+
+/* Auth */
+import { useAuth } from '@/contexts/AuthContext';
 
 export const Navbar: React.FC = () => {
   const { user, logout } = useAuth();
@@ -22,22 +34,26 @@ export const Navbar: React.FC = () => {
   };
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/80 backdrop-blur-xl">
-      <div className="flex h-16 items-center justify-between px-6">
+    <header className="fixed top-0 left-0 right-0 z-50 h-16 border-b bg-background/80 backdrop-blur">
+      <div className="flex h-full items-center justify-between px-6">
+        {/* Left */}
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-xl bg-primary/20 flex items-center justify-center">
             <Activity className="w-6 h-6 text-primary" />
           </div>
           <div>
-            <h1 className="text-lg font-semibold text-foreground">BP Monitor</h1>
-            <p className="text-xs text-muted-foreground">IoT Health System</p>
+            <h1 className="text-lg font-semibold">BP Monitor</h1>
+            <p className="text-xs text-muted-foreground">
+              IoT Health System
+            </p>
           </div>
         </div>
 
+        {/* Right */}
         <div className="flex items-center gap-4">
           <Button variant="ghost" size="icon" className="relative">
             <Bell className="w-5 h-5" />
-            <span className="absolute -top-1 -right-1 w-4 h-4 bg-destructive rounded-full text-[10px] flex items-center justify-center text-destructive-foreground font-medium">
+            <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-destructive text-[10px] flex items-center justify-center text-white">
               3
             </span>
           </Button>
@@ -48,23 +64,26 @@ export const Navbar: React.FC = () => {
                 <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center">
                   <User className="w-4 h-4 text-primary" />
                 </div>
-                <span className="hidden sm:block text-sm font-medium">{user?.name}</span>
+                <span className="hidden sm:block text-sm">
+                  {user?.name ?? 'User'}
+                </span>
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-56 bg-card border-border">
-              <DropdownMenuLabel className="text-foreground">My Account</DropdownMenuLabel>
-              <DropdownMenuSeparator className="bg-border" />
-              <DropdownMenuItem
-                onClick={() => navigate('/settings')}
-                className="cursor-pointer focus:bg-secondary"
-              >
+
+            <DropdownMenuContent align="end" className="w-56">
+              <DropdownMenuLabel>My Account</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+
+              <DropdownMenuItem onClick={() => navigate('/settings')}>
                 <Settings className="mr-2 h-4 w-4" />
                 Settings
               </DropdownMenuItem>
-              <DropdownMenuSeparator className="bg-border" />
+
+              <DropdownMenuSeparator />
+
               <DropdownMenuItem
                 onClick={handleLogout}
-                className="cursor-pointer text-destructive focus:bg-destructive/10 focus:text-destructive"
+                className="text-destructive"
               >
                 <LogOut className="mr-2 h-4 w-4" />
                 Logout
