@@ -30,7 +30,7 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) =>
             p-6
             min-h-[calc(100vh-4rem)]
             overflow-y-auto
-            transition-all duration-300
+            transition-all duration-300 ease-in-out
             ${sidebarExpanded ? 'ml-64' : 'ml-16'}
           `}
         >

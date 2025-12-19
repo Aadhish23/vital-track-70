@@ -67,6 +67,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
         'hidden lg:fixed lg:flex flex-col',
         'top-16 left-0 h-[calc(100vh-4rem)]',
         'bg-sidebar border-r border-sidebar-border z-40',
+        'overflow-hidden',
         expanded ? 'w-64' : 'w-16',
         'transition-[width] duration-300 ease-in-out'
       )}
