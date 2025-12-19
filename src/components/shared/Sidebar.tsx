@@ -47,26 +47,13 @@ export const Sidebar: React.FC<SidebarProps> = ({
   const isClinic = user?.role === 'clinic';
   const links = isClinic ? clinicLinks : patientFamilyLinks;
 
-  // Lock sidebar open when user navigates via sidebar
-  const [locked, setLocked] = React.useState(false);
-
+  // Keep sidebar always expanded after any navigation click
   const handleNavClick = () => {
     setExpanded(true);
-    setLocked(true); // Lock open after navigation
-  };
-
-  const handlePointerEnter = () => {
-    if (!locked) setExpanded(true);
-  };
-
-  const handlePointerLeave = () => {
-    if (!locked) setExpanded(false);
   };
 
   return (
     <aside
-      onPointerEnter={handlePointerEnter}
-      onPointerLeave={handlePointerLeave}
       className={cn(
         'hidden lg:fixed lg:flex flex-col',
         'top-16 left-0 h-[calc(100vh-4rem)]',
