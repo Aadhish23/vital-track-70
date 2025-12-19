@@ -81,19 +81,25 @@ const Login: React.FC = () => {
   return (
     <div className="min-h-screen flex items-start justify-center bg-background pt-10 px-4">
       <div className="w-full max-w-md mx-auto">
-        {/* Header */}
-        <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-primary/20 mb-4">
-            <Activity className="w-8 h-8 text-primary" />
+
+        {/* ================= HEADER ================= */}
+        <div className="flex items-center justify-center gap-4 mb-8">
+          <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-sky-100">
+            <Activity className="w-7 h-7 text-sky-600" />
           </div>
-          <h1 className="text-3xl font-bold mb-2">BP Monitor</h1>
-          <p className="text-muted-foreground">
-            Blood Pressure Monitoring System
-          </p>
+
+          <div className="text-left">
+            <h1 className="text-3xl font-bold leading-tight">
+              BP Monitor
+            </h1>
+            <p className="text-sm text-muted-foreground">
+              Blood Pressure Monitoring System
+            </p>
+          </div>
         </div>
 
-        {/* Card */}
-        <Card variant="glass">
+        {/* ================= LOGIN CARD ================= */}
+        <Card className="border border-sky-300 hover:border-sky-400 transition-colors">
           <CardHeader className="text-center pb-4">
             <CardTitle className="text-xl">Welcome Back</CardTitle>
             <CardDescription>Select your role</CardDescription>
@@ -118,9 +124,7 @@ const Login: React.FC = () => {
               </div>
             </div>
 
-            {/* ================= ROLE CONTENT ================= */}
             {selectedRole === 'clinic' ? (
-              /* Clinic → Google only */
               <GoogleLoginButton
                 onClick={handleGoogleLogin}
                 isLoading={isLoading}
@@ -128,7 +132,6 @@ const Login: React.FC = () => {
               />
             ) : (
               <>
-                {/* Email + DOB */}
                 <form onSubmit={handleEmailLogin} className="space-y-4">
                   <div className="space-y-2">
                     <Label>Email</Label>
@@ -153,9 +156,7 @@ const Login: React.FC = () => {
                         type="text"
                         value={dob}
                         onChange={(e) =>
-                          setDob(
-                            e.target.value.replace(/\D/g, '').slice(0, 8)
-                          )
+                          setDob(e.target.value.replace(/\D/g, '').slice(0, 8))
                         }
                         className="pl-10"
                         placeholder="ddmmyyyy"
@@ -163,9 +164,6 @@ const Login: React.FC = () => {
                         required
                       />
                     </div>
-                    <p className="text-xs text-muted-foreground">
-                      Example: 15031990
-                    </p>
                   </div>
 
                   <Button
@@ -197,7 +195,6 @@ const Login: React.FC = () => {
                   </div>
                 </div>
 
-                {/* Google */}
                 <GoogleLoginButton
                   onClick={handleGoogleLogin}
                   isLoading={isLoading}
@@ -206,7 +203,6 @@ const Login: React.FC = () => {
               </>
             )}
 
-            {/* Errors */}
             {(error || validationError) && (
               <div className="flex items-center gap-2 p-3 rounded-lg bg-destructive/10 border border-destructive/30">
                 <AlertCircle className="w-5 h-5 text-destructive" />
