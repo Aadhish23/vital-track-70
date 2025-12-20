@@ -1,4 +1,5 @@
-import React from 'react';
+
+import React, { useRef } from 'react';
 import { NavLink } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import {
@@ -47,33 +48,26 @@ export const Sidebar: React.FC<SidebarProps> = ({
   const isClinic = user?.role === 'clinic';
   const links = isClinic ? clinicLinks : patientFamilyLinks;
 
-  // Lock sidebar open after navigation click
-  const [locked, setLocked] = React.useState(false);
+  const sidebarRef = useRef<HTMLElement | null>(null);
 
-  const handleNavClick = () => {
-    setExpanded(true);
-    setLocked(true);
-  };
+  const handlePointerLeave = (e: React.PointerEvent) => {
+    if (!sidebarRef.current) return;
 
-  const handlePointerEnter = () => {
-    setExpanded(true);
-  };
-
-  const handlePointerLeave = () => {
-    if (!locked) {
+    // ✅ collapse ONLY if mouse truly left sidebar
+    if (!sidebarRef.current.contains(e.relatedTarget as Node)) {
       setExpanded(false);
     }
   };
 
   return (
     <aside
-      onPointerEnter={handlePointerEnter}
-      onPointerLeave={handlePointerLeave}
+      ref={sidebarRef}
+      onPointerEnter={() => setExpanded(true)}   // hover → expand
+      onPointerLeave={handlePointerLeave}        // real leave → collapse
       className={cn(
         'hidden lg:fixed lg:flex flex-col',
         'top-16 left-0 h-[calc(100vh-4rem)]',
         'bg-sidebar border-r border-sidebar-border z-40',
-        'overflow-hidden',
         expanded ? 'w-64' : 'w-16',
         'transition-[width] duration-300 ease-in-out'
       )}
@@ -87,7 +81,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
               key={link.to}
               to={link.to}
               end={link.end}
-              onClick={handleNavClick}
+              onClick={() => setExpanded(true)}  // 🔥 KEEP MAXIMIZED ON PAGE CHANGE
               className={({ isActive }) =>
                 cn(
                   'flex items-center gap-3 px-3 py-3 rounded-lg font-medium',

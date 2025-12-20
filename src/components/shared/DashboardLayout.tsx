@@ -10,7 +10,7 @@ interface DashboardLayoutProps {
 }
 
 export const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
-  const [sidebarExpanded, setSidebarExpanded] = useState(false);
+  const [sidebarExpanded, setSidebarExpanded] = useState(true);
 
   return (
     <div className="min-h-screen bg-background">
@@ -30,7 +30,7 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) =>
             p-6
             min-h-[calc(100vh-4rem)]
             overflow-y-auto
-            transition-all duration-300 ease-in-out
+            transition-all duration-300
             ${sidebarExpanded ? 'ml-64' : 'ml-16'}
           `}
         >
