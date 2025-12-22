@@ -67,19 +67,25 @@ export const PatientDashboard: React.FC = () => {
 
   return (
     <DashboardLayout>
-      <div className="space-y-6">
+      <div className="space-y-4 lg:space-y-6">
+        {/* Header - larger touch-friendly text on mobile */}
         <div className="fade-in">
-          <h1 className="text-2xl font-bold text-foreground">
+          <h1 className="text-xl lg:text-2xl font-bold text-foreground">
             Welcome back, {user?.name?.split(' ')[0] || 'Patient'}
           </h1>
-          <p className="text-muted-foreground">Here's your health summary for today</p>
+          <p className="text-sm lg:text-base text-muted-foreground mt-1">
+            Here's your health summary for today
+          </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-          <div className="fade-in" style={{ animationDelay: '0.1s' }}>
+        {/* Key Metrics Grid - BP Reading is primary, shown first on mobile */}
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 lg:gap-6">
+          {/* Primary: BP Reading - always visible above the fold */}
+          <div className="fade-in md:col-span-2 xl:col-span-1" style={{ animationDelay: '0.1s' }}>
             <BPReadingCard reading={currentReading} previousReading={previousReading} />
           </div>
           
+          {/* Secondary metrics - stacked on mobile */}
           <div className="fade-in" style={{ animationDelay: '0.2s' }}>
             <HeartRateCard heartRate={currentReading.heartRate} status="normal" />
           </div>
@@ -89,12 +95,16 @@ export const PatientDashboard: React.FC = () => {
           </div>
         </div>
 
+        {/* Trend Chart - reduced height on mobile */}
         <div className="fade-in" style={{ animationDelay: '0.4s' }}>
           <BPTrendChart data={trendData} title="Weekly BP Trends" />
         </div>
 
+        {/* Alerts Section */}
         <div className="fade-in" style={{ animationDelay: '0.5s' }}>
-          <h2 className="text-lg font-semibold text-foreground mb-4">Recent Alerts</h2>
+          <h2 className="text-base lg:text-lg font-semibold text-foreground mb-3 lg:mb-4">
+            Recent Alerts
+          </h2>
           <div className="space-y-3">
             {alerts.map((alert) => (
               <AlertCard

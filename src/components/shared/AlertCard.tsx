@@ -178,8 +178,8 @@ export const AlertCard: React.FC<AlertCardProps> = ({
       onMouseLeave={handleMouseLeave}
       className={cn(
         "relative overflow-hidden border-l-4 transition-all duration-300",
-        compact ? "p-3" : "p-4",
-        "flex items-start gap-3",
+        compact ? "p-2.5 lg:p-3" : "p-3 lg:p-4",
+        "flex items-start gap-2.5 lg:gap-3",
         config.borderColor,
         config.bgColor,
         config.hoverBg,
@@ -194,7 +194,7 @@ export const AlertCard: React.FC<AlertCardProps> = ({
       {/* Auto-dismiss progress bar */}
       {autoDismiss && (
         <div 
-          className="absolute bottom-0 left-0 h-1 transition-all duration-100 ease-linear"
+          className="absolute bottom-0 left-0 h-0.5 lg:h-1 transition-all duration-100 ease-linear"
           style={{ width: `${progress}%` }}
         >
           <div className={cn("h-full", config.accentColor, "opacity-60")} />
@@ -220,19 +220,19 @@ export const AlertCard: React.FC<AlertCardProps> = ({
           )}
           <Icon className={cn(
             "relative",
-            compact ? "w-4 h-4" : "w-5 h-5"
+            compact ? "w-3.5 h-3.5 lg:w-4 lg:h-4" : "w-4 h-4 lg:w-5 lg:h-5"
           )} />
         </div>
       </div>
       
-      <div className="flex-1 min-w-0 space-y-1">
+      <div className="flex-1 min-w-0 space-y-0.5 lg:space-y-1">
         {/* Priority indicator for critical alerts */}
         {alert.type === 'critical' && !compact && getPriorityIndicator()}
         
         {/* Message */}
         <p className={cn(
           "text-foreground leading-relaxed break-words",
-          compact ? "text-xs" : "text-sm font-medium",
+          compact ? "text-[11px] lg:text-xs" : "text-xs lg:text-sm font-medium",
           interactive && "group-hover:text-foreground/80"
         )}>
           {alert.message}
@@ -243,7 +243,7 @@ export const AlertCard: React.FC<AlertCardProps> = ({
           <div className="flex items-center gap-2 flex-wrap">
             <p className={cn(
               "text-muted-foreground flex items-center gap-1",
-              compact ? "text-[10px]" : "text-xs"
+              compact ? "text-[9px] lg:text-[10px]" : "text-[10px] lg:text-xs"
             )}>
               <span className="inline-block w-1 h-1 rounded-full bg-muted-foreground/40" aria-hidden="true" />
               <time dateTime={new Date(alert.timestamp).toISOString()}>
@@ -254,7 +254,7 @@ export const AlertCard: React.FC<AlertCardProps> = ({
         )}
       </div>
       
-      {/* Dismiss button */}
+      {/* Dismiss button - larger touch target on mobile */}
       {onDismiss && (
         <button
           onClick={(e) => {
@@ -265,11 +265,13 @@ export const AlertCard: React.FC<AlertCardProps> = ({
           className={cn(
             "flex-shrink-0 text-muted-foreground hover:text-foreground transition-all duration-200",
             "hover:bg-background/50 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary/50",
-            compact ? "p-0.5 -mr-0.5 -mt-0.5" : "p-1 -mr-1 -mt-1",
-            "hover:rotate-90 active:scale-90"
+            compact ? "p-1 lg:p-0.5 -mr-1 lg:-mr-0.5 -mt-0.5" : "p-1.5 lg:p-1 -mr-1 -mt-0.5 lg:-mt-1",
+            "hover:rotate-90 active:scale-90",
+            // Ensure minimum touch target of 44x44 on mobile
+            "min-w-[44px] min-h-[44px] lg:min-w-0 lg:min-h-0 flex items-center justify-center"
           )}
         >
-          <X className={cn(compact ? "w-3.5 h-3.5" : "w-4 h-4")} />
+          <X className={cn(compact ? "w-3.5 h-3.5 lg:w-3.5 lg:h-3.5" : "w-4 h-4")} />
         </button>
       )}
 

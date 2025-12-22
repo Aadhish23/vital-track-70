@@ -92,96 +92,99 @@ export const ClinicDashboard: React.FC = () => {
 
   return (
     <DashboardLayout>
-      <div className="space-y-6">
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 fade-in">
+      <div className="space-y-4 lg:space-y-6">
+        {/* Header - responsive layout */}
+        <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between fade-in">
           <div>
-            <h1 className="text-2xl font-bold text-foreground">Clinic Dashboard</h1>
-            <p className="text-muted-foreground">Manage and monitor your patients</p>
+            <h1 className="text-xl lg:text-2xl font-bold text-foreground">Clinic Dashboard</h1>
+            <p className="text-sm lg:text-base text-muted-foreground mt-0.5">Manage and monitor your patients</p>
           </div>
-          <Button onClick={() => navigate('/clinic/add-patient')} className="w-fit">
+          <Button onClick={() => navigate('/clinic/add-patient')} className="w-full sm:w-fit h-11 lg:h-10">
             <UserPlus className="w-4 h-4 mr-2" />
             Add Patient
           </Button>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 fade-in" style={{ animationDelay: '0.1s' }}>
+        {/* Stats Grid - 2x2 on mobile, 4 columns on desktop */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 lg:gap-4 fade-in" style={{ animationDelay: '0.1s' }}>
           <Card variant="glass">
-            <CardContent className="p-4">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-lg bg-primary/20 flex items-center justify-center">
-                  <Users className="w-5 h-5 text-primary" />
+            <CardContent className="p-3 lg:p-4">
+              <div className="flex items-center gap-2 lg:gap-3">
+                <div className="w-9 h-9 lg:w-10 lg:h-10 rounded-lg bg-primary/20 flex items-center justify-center">
+                  <Users className="w-4 h-4 lg:w-5 lg:h-5 text-primary" />
                 </div>
                 <div>
-                  <p className="text-2xl font-bold text-foreground">{stats.total}</p>
-                  <p className="text-xs text-muted-foreground">Total Patients</p>
+                  <p className="text-xl lg:text-2xl font-bold text-foreground">{stats.total}</p>
+                  <p className="text-[10px] lg:text-xs text-muted-foreground">Total Patients</p>
                 </div>
               </div>
             </CardContent>
           </Card>
 
           <Card variant="glass">
-            <CardContent className="p-4">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-lg bg-destructive/20 flex items-center justify-center">
-                  <AlertTriangle className="w-5 h-5 text-destructive" />
+            <CardContent className="p-3 lg:p-4">
+              <div className="flex items-center gap-2 lg:gap-3">
+                <div className="w-9 h-9 lg:w-10 lg:h-10 rounded-lg bg-destructive/20 flex items-center justify-center">
+                  <AlertTriangle className="w-4 h-4 lg:w-5 lg:h-5 text-destructive" />
                 </div>
                 <div>
-                  <p className="text-2xl font-bold text-destructive">{stats.critical}</p>
-                  <p className="text-xs text-muted-foreground">Critical</p>
+                  <p className="text-xl lg:text-2xl font-bold text-destructive">{stats.critical}</p>
+                  <p className="text-[10px] lg:text-xs text-muted-foreground">Critical</p>
                 </div>
               </div>
             </CardContent>
           </Card>
 
           <Card variant="glass">
-            <CardContent className="p-4">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-lg bg-warning/20 flex items-center justify-center">
-                  <Activity className="w-5 h-5 text-warning" />
+            <CardContent className="p-3 lg:p-4">
+              <div className="flex items-center gap-2 lg:gap-3">
+                <div className="w-9 h-9 lg:w-10 lg:h-10 rounded-lg bg-warning/20 flex items-center justify-center">
+                  <Activity className="w-4 h-4 lg:w-5 lg:h-5 text-warning" />
                 </div>
                 <div>
-                  <p className="text-2xl font-bold text-warning">{stats.elevated}</p>
-                  <p className="text-xs text-muted-foreground">Elevated</p>
+                  <p className="text-xl lg:text-2xl font-bold text-warning">{stats.elevated}</p>
+                  <p className="text-[10px] lg:text-xs text-muted-foreground">Elevated</p>
                 </div>
               </div>
             </CardContent>
           </Card>
 
           <Card variant="glass">
-            <CardContent className="p-4">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-lg bg-success/20 flex items-center justify-center">
-                  <Activity className="w-5 h-5 text-success" />
+            <CardContent className="p-3 lg:p-4">
+              <div className="flex items-center gap-2 lg:gap-3">
+                <div className="w-9 h-9 lg:w-10 lg:h-10 rounded-lg bg-success/20 flex items-center justify-center">
+                  <Activity className="w-4 h-4 lg:w-5 lg:h-5 text-success" />
                 </div>
                 <div>
-                  <p className="text-2xl font-bold text-success">{stats.normal}</p>
-                  <p className="text-xs text-muted-foreground">Normal</p>
+                  <p className="text-xl lg:text-2xl font-bold text-success">{stats.normal}</p>
+                  <p className="text-[10px] lg:text-xs text-muted-foreground">Normal</p>
                 </div>
               </div>
             </CardContent>
           </Card>
         </div>
 
-        <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
-          <div className="xl:col-span-2 space-y-4 fade-in" style={{ animationDelay: '0.2s' }}>
-            <div className="flex items-center gap-4">
-              <div className="relative flex-1">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
-                <Input
-                  placeholder="Search patients..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-10"
-                />
-              </div>
+        {/* Main content - stacked on mobile */}
+        <div className="grid grid-cols-1 xl:grid-cols-3 gap-4 lg:gap-6">
+          {/* Patient List Section */}
+          <div className="xl:col-span-2 space-y-3 lg:space-y-4 fade-in" style={{ animationDelay: '0.2s' }}>
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 lg:w-5 lg:h-5 text-muted-foreground" />
+              <Input
+                placeholder="Search patients..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="pl-9 lg:pl-10 h-11 lg:h-10 text-sm lg:text-base"
+              />
             </div>
 
             <PatientTable patients={filteredPatients} />
           </div>
 
-          <div className="space-y-4 fade-in" style={{ animationDelay: '0.3s' }}>
-            <h2 className="text-lg font-semibold text-foreground">Recent Alerts</h2>
-            <div className="space-y-3">
+          {/* Alerts Section */}
+          <div className="space-y-3 lg:space-y-4 fade-in" style={{ animationDelay: '0.3s' }}>
+            <h2 className="text-base lg:text-lg font-semibold text-foreground">Recent Alerts</h2>
+            <div className="space-y-2 lg:space-y-3">
               {mockAlerts.map((alert) => (
                 <AlertCard
                   key={alert.id}
