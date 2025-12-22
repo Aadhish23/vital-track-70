@@ -16,10 +16,10 @@ export const HeartRateCard: React.FC<HeartRateCardProps> = ({ heartRate, status 
   };
 
   return (
-    <Card variant="glassHover">
+    <Card variant="glassHover" className="transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-primary/20 hover:-translate-y-1 hover:border-primary/50 border border-red-400">
       <CardHeader className="pb-2">
-        <CardTitle className="text-lg flex items-center gap-2">
-          <Heart className="w-5 h-5 text-destructive heartbeat" />
+        <CardTitle className="text-lg flex items-center gap-2 group">
+          <Heart className="w-5 h-5 text-destructive heartbeat group-hover:scale-110 transition-transform duration-300" />
           Heart Rate
         </CardTitle>
       </CardHeader>

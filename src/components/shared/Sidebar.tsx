@@ -65,7 +65,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
       onPointerEnter={() => setExpanded(true)}   // hover → expand
       onPointerLeave={handlePointerLeave}        // real leave → collapse
       className={cn(
-        'hidden lg:fixed lg:flex flex-col',
+        'fixed flex flex-col',
         'top-16 left-0 h-[calc(100vh-4rem)]',
         'bg-sidebar border-r border-sidebar-border z-40',
         expanded ? 'w-64' : 'w-16',
