@@ -1,12 +1,16 @@
 import React, { useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { format } from 'date-fns';
 import { DashboardLayout } from '@/components/shared/DashboardLayout';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { ArrowLeft, Mail, Calendar, User, Loader2, CheckCircle, Users, Heart } from 'lucide-react';
+import { Calendar } from '@/components/ui/calendar';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { ArrowLeft, Mail, CalendarIcon, User, Loader2, CheckCircle, Users, Heart, Lock } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
+import { cn } from '@/lib/utils';
 
 export const AddPatient: React.FC = () => {
   const navigate = useNavigate();
@@ -15,12 +19,13 @@ export const AddPatient: React.FC = () => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
-    dob: '',
+    dob: undefined as Date | undefined,
     phone: '',
     familyName: '',
     familyEmail: '',
     familyRelationship: '',
   });
+  const [dobPopoverOpen, setDobPopoverOpen] = useState(false);
 
   const errors = useMemo(() => {
     const newErrors: Record<string, string> = {};
@@ -39,9 +44,16 @@ export const AddPatient: React.FC = () => {
     }
 
     if (touched.dob && formData.dob) {
-      const dobRegex = /^(0[1-9]|[12][0-9]|3[01])(0[1-9]|1[012])\d{4}$/;
-      if (!dobRegex.test(formData.dob)) {
-        newErrors.dob = 'Please enter DOB in ddmmyyyy format';
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      
+      if (formData.dob > today) {
+        newErrors.dob = 'Date of birth cannot be in the future';
+      }
+      
+      const age = today.getFullYear() - formData.dob.getFullYear();
+      if (age > 120) {
+        newErrors.dob = 'Please enter a valid date of birth';
       }
     }
 
@@ -78,7 +90,7 @@ export const AddPatient: React.FC = () => {
       const payload: Record<string, unknown> = {
         patient_name: formData.name,
         patient_email: formData.email,
-        dob: formData.dob || undefined,
+        dob: formData.dob ? format(formData.dob, 'ddMMyyyy') : undefined,
         phone: formData.phone || undefined,
       };
 
@@ -186,26 +198,60 @@ export const AddPatient: React.FC = () => {
                 )}
               </div>
 
-              {/* Date of Birth - Optional */}
+              {/* Date of Birth - Calendar Picker */}
               <div className="space-y-2">
-                <Label htmlFor="dob">Date of Birth</Label>
-                <div className="relative">
-                  <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
-                  <Input
-                    id="dob"
-                    placeholder="ddmmyyyy (e.g., 15031990)"
-                    value={formData.dob}
-                    onChange={(e) =>
-                      setFormData({ ...formData, dob: e.target.value.replace(/\D/g, '').slice(0, 8) })
-                    }
-                    onBlur={() => handleBlur('dob')}
-                    className="pl-10"
-                    maxLength={8}
-                    aria-invalid={!!errors.dob}
-                    aria-describedby={errors.dob ? 'dob-error' : undefined}
-                  />
+                <Label htmlFor="dob">
+                  Date of Birth (Password) 
+                  <span className="ml-2 text-xs text-blue-600 font-normal">✓ Used as password</span>
+                </Label>
+                <Popover open={dobPopoverOpen} onOpenChange={setDobPopoverOpen}>
+                  <PopoverTrigger asChild>
+                    <Button
+                      id="dob"
+                      variant="outline"
+                      className={cn(
+                        "w-full justify-start text-left font-normal",
+                        !formData.dob && "text-muted-foreground",
+                        errors.dob && "border-rose-400"
+                      )}
+                      onBlur={() => handleBlur('dob')}
+                    >
+                      <CalendarIcon className="mr-2 h-4 w-4" />
+                      {formData.dob ? (
+                        <span className="flex items-center gap-2">
+                          {format(formData.dob, 'PPP')}
+                          <span className="text-xs text-muted-foreground">→ Password: {format(formData.dob, 'ddMMyyyy')}</span>
+                        </span>
+                      ) : (
+                        <span>Pick date of birth (will be used as password)</span>
+                      )}
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-auto p-0" align="start">
+                    <Calendar
+                      mode="single"
+                      selected={formData.dob}
+                      onSelect={(date) => {
+                        setFormData({ ...formData, dob: date });
+                        setDobPopoverOpen(false);
+                        handleBlur('dob');
+                      }}
+                      disabled={(date) => date > new Date() || date < new Date('1900-01-01')}
+                      initialFocus
+                      defaultMonth={new Date(1990, 0)}
+                    />
+                  </PopoverContent>
+                </Popover>
+                <div className="flex items-start gap-2 p-3 rounded-lg bg-blue-50 border border-blue-200">
+                  <Lock className="w-4 h-4 text-blue-600 mt-0.5 flex-shrink-0" />
+                  <div className="text-xs text-blue-900">
+                    <p className="font-semibold">Password automatically set</p>
+                    <p className="text-blue-700 mt-1">The date of birth in DDMMYYYY format will be the patient's login password. No manual entry needed.</p>
+                    {formData.dob && (
+                      <p className="mt-2 font-mono font-bold text-blue-600">Password: {format(formData.dob, 'ddMMyyyy')}</p>
+                    )}
+                  </div>
                 </div>
-                <p className="text-xs text-muted-foreground">This will be used as the patient's initial password</p>
                 {errors.dob && (
                   <p id="dob-error" className="text-sm text-rose-400" role="alert">
                     {errors.dob}

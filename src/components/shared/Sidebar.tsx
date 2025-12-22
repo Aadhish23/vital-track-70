@@ -1,6 +1,6 @@
 
 import React, { useRef } from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import {
   LayoutDashboard,
@@ -10,6 +10,7 @@ import {
   Settings,
   UserPlus,
   X,
+  LogOut,
 } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { Sheet, SheetContent } from '@/components/ui/sheet';
@@ -50,6 +51,7 @@ interface SidebarContentProps {
   isClinic: boolean;
   expanded: boolean;
   onNavClick?: () => void;
+  onLogout: () => void;
 }
 
 const SidebarNavContent: React.FC<SidebarContentProps> = ({
@@ -57,9 +59,10 @@ const SidebarNavContent: React.FC<SidebarContentProps> = ({
   isClinic,
   expanded,
   onNavClick,
+  onLogout,
 }) => (
   <>
-    <nav className="flex-1 p-2 space-y-2">
+    <nav className="flex-1 p-2 space-y-2 overflow-y-auto">
       {links.map((link) => {
         const Icon = link.icon;
 
@@ -89,6 +92,7 @@ const SidebarNavContent: React.FC<SidebarContentProps> = ({
       })}
     </nav>
 
+    {/* Device Status - for non-clinic users */}
     {!isClinic && expanded && (
       <div className="p-3 border-t border-sidebar-border">
         <div className="glass-card p-3">
@@ -102,6 +106,28 @@ const SidebarNavContent: React.FC<SidebarContentProps> = ({
         </div>
       </div>
     )}
+
+    {/* Logout Button - Fixed at bottom */}
+    <div className="p-3 border-t border-sidebar-border mt-auto">
+      <Button
+        variant="ghost"
+        onClick={onLogout}
+        className={cn(
+          'w-full flex items-center gap-3 px-3 py-3 rounded-lg font-medium group',
+          'bg-red-50 border border-red-300 text-sidebar-foreground',
+          'hover:bg-red-600 hover:border-red-600 hover:text-white',
+          'transition-all duration-200',
+          !expanded && 'justify-center'
+        )}
+      >
+        <LogOut className="w-5 h-5 shrink-0 text-red-600 group-hover:text-white transition-colors duration-200" />
+        {expanded && (
+          <span className="whitespace-nowrap">
+            Logout
+          </span>
+        )}
+      </Button>
+    </div>
   </>
 );
 
@@ -115,7 +141,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
   mobileDrawerOpen = false,
   setMobileDrawerOpen,
 }) => {
-  const { user } = useAuth();
+  const navigate = useNavigate();
+  const { user, logout } = useAuth();
   const isClinic = user?.role === 'clinic';
   const links = isClinic ? clinicLinks : patientFamilyLinks;
 
@@ -132,6 +159,12 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
   const closeMobileDrawer = () => {
     setMobileDrawerOpen?.(false);
+  };
+
+  const handleLogout = () => {
+    logout();
+    closeMobileDrawer();
+    navigate('/', { replace: true });
   };
 
   return (
@@ -155,6 +188,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
           isClinic={isClinic}
           expanded={expanded}
           onNavClick={() => setExpanded(true)}
+          onLogout={handleLogout}
         />
       </aside>
 
@@ -165,8 +199,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
           className="w-72 p-0 bg-sidebar border-r border-sidebar-border"
         >
           <div className="flex flex-col h-full">
-            {/* Header */}
-            <div className="flex items-center justify-between p-4 border-b border-sidebar-border">
+            {/* Header - Mobile only */}
+            <div className="flex items-center justify-between p-4 border-b border-sidebar-border lg:hidden">
               <span className="font-semibold text-sidebar-foreground">Menu</span>
               <Button 
                 variant="ghost" 
@@ -184,6 +218,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
               isClinic={isClinic}
               expanded={true}
               onNavClick={closeMobileDrawer}
+              onLogout={handleLogout}
             />
           </div>
         </SheetContent>
