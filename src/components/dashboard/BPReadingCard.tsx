@@ -28,19 +28,19 @@ export const BPReadingCard: React.FC<BPReadingCardProps> = ({ reading, previousR
       className="relative overflow-hidden transition-all duration-300 hover:shadow-2xl group border border-yellow-400"
     >
       {/* Subtle animated background glow */}
-      <div className={cn("absolute top-0 right-0 w-32 h-32 rounded-full blur-3xl opacity-15 animate-pulse", config.bg)} />
-      <div className={cn("absolute bottom-0 left-0 w-24 h-24 rounded-full blur-2xl opacity-10", config.bg)} />
+      <div className={cn("absolute top-0 right-0 w-24 lg:w-32 h-24 lg:h-32 rounded-full blur-3xl opacity-15 animate-pulse", config.bg)} />
+      <div className={cn("absolute bottom-0 left-0 w-20 lg:w-24 h-20 lg:h-24 rounded-full blur-2xl opacity-10", config.bg)} />
       
-      <CardHeader className="pb-3 relative z-10">
+      <CardHeader className="pb-2 lg:pb-3 relative z-10 px-4 lg:px-6 pt-4 lg:pt-6">
         <div className="flex items-center justify-between">
-          <CardTitle className="text-lg flex items-center gap-3">
-            <div className={cn("p-2.5 rounded-xl transition-all duration-300 group-hover:scale-110 group-hover:rotate-3", config.bg)}>
-              <Activity className={cn("w-5 h-5", config.color)} />
+          <CardTitle className="text-base lg:text-lg flex items-center gap-2 lg:gap-3">
+            <div className={cn("p-2 lg:p-2.5 rounded-xl transition-all duration-300 group-hover:scale-110 group-hover:rotate-3", config.bg)}>
+              <Activity className={cn("w-4 h-4 lg:w-5 lg:h-5", config.color)} />
             </div>
             <span className="font-semibold text-foreground">Blood Pressure</span>
           </CardTitle>
           <span className={cn(
-            "px-4 py-1.5 rounded-full text-xs font-semibold tracking-wide",
+            "px-3 lg:px-4 py-1 lg:py-1.5 rounded-full text-[10px] lg:text-xs font-semibold tracking-wide",
             "transition-all duration-300 group-hover:scale-105 shadow-sm",
             config.bg, 
             config.color
@@ -50,39 +50,39 @@ export const BPReadingCard: React.FC<BPReadingCardProps> = ({ reading, previousR
         </div>
       </CardHeader>
       
-      <CardContent className="relative z-10">
-        {/* Main reading display with enhanced typography */}
-        <div className="flex items-end gap-3 mb-2">
-          <div className="flex items-baseline gap-2">
-            <span className="text-7xl font-bold text-foreground tracking-tight leading-none transition-all duration-300 group-hover:scale-105">
+      <CardContent className="relative z-10 px-4 lg:px-6 pb-4 lg:pb-6">
+        {/* Main reading display - responsive typography */}
+        <div className="flex items-end gap-2 lg:gap-3 mb-2">
+          <div className="flex items-baseline gap-1.5 lg:gap-2">
+            <span className="text-5xl lg:text-7xl font-bold text-foreground tracking-tight leading-none transition-all duration-300 group-hover:scale-105">
               {reading.systolic}
             </span>
-            <span className="text-3xl text-muted-foreground/70 font-light">/</span>
-            <span className="text-5xl font-semibold text-foreground tracking-tight transition-all duration-300 group-hover:scale-105">
+            <span className="text-2xl lg:text-3xl text-muted-foreground/70 font-light">/</span>
+            <span className="text-4xl lg:text-5xl font-semibold text-foreground tracking-tight transition-all duration-300 group-hover:scale-105">
               {reading.diastolic}
             </span>
           </div>
-          <span className="text-sm text-muted-foreground mb-3 font-medium tracking-wide">mmHg</span>
+          <span className="text-xs lg:text-sm text-muted-foreground mb-2 lg:mb-3 font-medium tracking-wide">mmHg</span>
         </div>
 
         {/* Heart rate if available */}
         {reading.heartRate && (
-          <div className="flex items-center gap-2 mt-3 mb-4">
+          <div className="flex items-center gap-2 mt-2 lg:mt-3 mb-3 lg:mb-4">
             <div className="relative">
-              <Activity className="w-4 h-4 text-muted-foreground animate-pulse" />
-              <div className="absolute inset-0 w-4 h-4 bg-current opacity-20 rounded-full animate-ping" />
+              <Activity className="w-3.5 h-3.5 lg:w-4 lg:h-4 text-muted-foreground animate-pulse" />
+              <div className="absolute inset-0 w-3.5 h-3.5 lg:w-4 lg:h-4 bg-current opacity-20 rounded-full animate-ping" />
             </div>
-            <span className="text-sm text-muted-foreground">
-              <span className="font-semibold text-foreground text-base">{reading.heartRate}</span> bpm
+            <span className="text-xs lg:text-sm text-muted-foreground">
+              <span className="font-semibold text-foreground text-sm lg:text-base">{reading.heartRate}</span> bpm
             </span>
           </div>
         )}
 
-        {/* Trend indicators with enhanced design */}
+        {/* Trend indicators - stack on mobile, row on desktop */}
         {previousReading && (
-          <div className="flex gap-3 mt-5 pt-4 border-t border-border/50">
+          <div className="flex flex-wrap gap-2 lg:gap-3 mt-4 lg:mt-5 pt-3 lg:pt-4 border-t border-border/50">
             <div className={cn(
-              "flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium transition-all duration-300 hover:scale-105",
+              "flex items-center gap-1.5 lg:gap-2 px-3 lg:px-4 py-1.5 lg:py-2 rounded-xl text-xs lg:text-sm font-medium transition-all duration-300 hover:scale-105",
               systolicDiff > 0 
                 ? 'bg-destructive/10 hover:bg-destructive/15 shadow-sm' 
                 : systolicDiff < 0 
@@ -90,11 +90,11 @@ export const BPReadingCard: React.FC<BPReadingCardProps> = ({ reading, previousR
                 : 'bg-muted/30'
             )}>
               {systolicDiff > 0 ? (
-                <TrendingUp className="w-4 h-4 text-destructive" />
+                <TrendingUp className="w-3.5 h-3.5 lg:w-4 lg:h-4 text-destructive" />
               ) : systolicDiff < 0 ? (
-                <TrendingDown className="w-4 h-4 text-success" />
+                <TrendingDown className="w-3.5 h-3.5 lg:w-4 lg:h-4 text-success" />
               ) : (
-                <div className="w-4 h-0.5 bg-muted-foreground/50 rounded" />
+                <div className="w-3.5 lg:w-4 h-0.5 bg-muted-foreground/50 rounded" />
               )}
               <span className={cn(
                 "font-semibold",
@@ -102,10 +102,10 @@ export const BPReadingCard: React.FC<BPReadingCardProps> = ({ reading, previousR
               )}>
                 {systolicDiff > 0 ? '+' : ''}{systolicDiff}
               </span>
-              <span className="text-xs text-muted-foreground font-normal">systolic</span>
+              <span className="text-[10px] lg:text-xs text-muted-foreground font-normal">sys</span>
             </div>
             <div className={cn(
-              "flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium transition-all duration-300 hover:scale-105",
+              "flex items-center gap-1.5 lg:gap-2 px-3 lg:px-4 py-1.5 lg:py-2 rounded-xl text-xs lg:text-sm font-medium transition-all duration-300 hover:scale-105",
               diastolicDiff > 0 
                 ? 'bg-destructive/10 hover:bg-destructive/15 shadow-sm' 
                 : diastolicDiff < 0 
@@ -113,11 +113,11 @@ export const BPReadingCard: React.FC<BPReadingCardProps> = ({ reading, previousR
                 : 'bg-muted/30'
             )}>
               {diastolicDiff > 0 ? (
-                <TrendingUp className="w-4 h-4 text-destructive" />
+                <TrendingUp className="w-3.5 h-3.5 lg:w-4 lg:h-4 text-destructive" />
               ) : diastolicDiff < 0 ? (
-                <TrendingDown className="w-4 h-4 text-success" />
+                <TrendingDown className="w-3.5 h-3.5 lg:w-4 lg:h-4 text-success" />
               ) : (
-                <div className="w-4 h-0.5 bg-muted-foreground/50 rounded" />
+                <div className="w-3.5 lg:w-4 h-0.5 bg-muted-foreground/50 rounded" />
               )}
               <span className={cn(
                 "font-semibold",
@@ -125,15 +125,15 @@ export const BPReadingCard: React.FC<BPReadingCardProps> = ({ reading, previousR
               )}>
                 {diastolicDiff > 0 ? '+' : ''}{diastolicDiff}
               </span>
-              <span className="text-xs text-muted-foreground font-normal">diastolic</span>
+              <span className="text-[10px] lg:text-xs text-muted-foreground font-normal">dia</span>
             </div>
           </div>
         )}
 
         {/* Timestamp with icon */}
-        <div className="flex items-center gap-2 mt-5 pt-4 border-t border-border/30">
-          <Clock className="w-3.5 h-3.5 text-muted-foreground/70" />
-          <p className="text-xs text-muted-foreground font-medium">
+        <div className="flex items-center gap-2 mt-4 lg:mt-5 pt-3 lg:pt-4 border-t border-border/30">
+          <Clock className="w-3 h-3 lg:w-3.5 lg:h-3.5 text-muted-foreground/70" />
+          <p className="text-[10px] lg:text-xs text-muted-foreground font-medium">
             {new Date(reading.timestamp).toLocaleString('en-US', {
               month: 'short',
               day: 'numeric',
