@@ -9,12 +9,17 @@ import {
   Smartphone,
   Settings,
   UserPlus,
+  X,
 } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
+import { Sheet, SheetContent } from '@/components/ui/sheet';
+import { Button } from '@/components/ui/button';
 
 interface SidebarProps {
   expanded: boolean;
   setExpanded: (value: boolean) => void;
+  mobileDrawerOpen?: boolean;
+  setMobileDrawerOpen?: (value: boolean) => void;
 }
 
 /* -------------------------
@@ -37,12 +42,78 @@ const clinicLinks = [
 ];
 
 /* -------------------------
+   Sidebar Content (shared)
+-------------------------- */
+
+interface SidebarContentProps {
+  links: typeof patientFamilyLinks;
+  isClinic: boolean;
+  expanded: boolean;
+  onNavClick?: () => void;
+}
+
+const SidebarNavContent: React.FC<SidebarContentProps> = ({
+  links,
+  isClinic,
+  expanded,
+  onNavClick,
+}) => (
+  <>
+    <nav className="flex-1 p-2 space-y-2">
+      {links.map((link) => {
+        const Icon = link.icon;
+
+        return (
+          <NavLink
+            key={link.to}
+            to={link.to}
+            end={link.end}
+            onClick={onNavClick}
+            className={({ isActive }) =>
+              cn(
+                'flex items-center gap-3 px-3 py-3 rounded-lg font-medium',
+                isActive
+                  ? 'bg-sidebar-primary text-sidebar-primary-foreground'
+                  : 'text-sidebar-foreground hover:bg-sidebar-accent'
+              )
+            }
+          >
+            <Icon className="w-5 h-5 shrink-0" />
+            {expanded && (
+              <span className="whitespace-nowrap">
+                {link.label}
+              </span>
+            )}
+          </NavLink>
+        );
+      })}
+    </nav>
+
+    {!isClinic && expanded && (
+      <div className="p-3 border-t border-sidebar-border">
+        <div className="glass-card p-3">
+          <div className="flex items-center gap-3">
+            <Smartphone className="w-4 h-4 text-primary" />
+            <div>
+              <p className="text-sm font-medium">Device Status</p>
+              <p className="text-xs text-success">Connected</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    )}
+  </>
+);
+
+/* -------------------------
    Sidebar
 -------------------------- */
 
 export const Sidebar: React.FC<SidebarProps> = ({
   expanded,
   setExpanded,
+  mobileDrawerOpen = false,
+  setMobileDrawerOpen,
 }) => {
   const { user } = useAuth();
   const isClinic = user?.role === 'clinic';
@@ -59,62 +130,64 @@ export const Sidebar: React.FC<SidebarProps> = ({
     }
   };
 
+  const closeMobileDrawer = () => {
+    setMobileDrawerOpen?.(false);
+  };
+
   return (
-    <aside
-      ref={sidebarRef}
-      onPointerEnter={() => setExpanded(true)}   // hover → expand
-      onPointerLeave={handlePointerLeave}        // real leave → collapse
-      className={cn(
-        'fixed flex flex-col',
-        'top-16 left-0 h-[calc(100vh-4rem)]',
-        'bg-sidebar border-r border-sidebar-border z-40',
-        expanded ? 'w-64' : 'w-16',
-        'transition-[width] duration-300 ease-in-out'
-      )}
-    >
-      <nav className="flex-1 p-2 space-y-2">
-        {links.map((link) => {
-          const Icon = link.icon;
+    <>
+      {/* Desktop Sidebar - hidden on mobile */}
+      <aside
+        ref={sidebarRef}
+        onPointerEnter={() => setExpanded(true)}
+        onPointerLeave={handlePointerLeave}
+        className={cn(
+          'fixed flex-col',
+          'top-16 left-0 h-[calc(100vh-4rem)]',
+          'bg-sidebar border-r border-sidebar-border z-40',
+          expanded ? 'w-64' : 'w-16',
+          'transition-[width] duration-300 ease-in-out',
+          'hidden lg:flex' // Hide on mobile, show on lg+
+        )}
+      >
+        <SidebarNavContent
+          links={links}
+          isClinic={isClinic}
+          expanded={expanded}
+          onNavClick={() => setExpanded(true)}
+        />
+      </aside>
 
-          return (
-            <NavLink
-              key={link.to}
-              to={link.to}
-              end={link.end}
-              onClick={() => setExpanded(true)}  // 🔥 KEEP MAXIMIZED ON PAGE CHANGE
-              className={({ isActive }) =>
-                cn(
-                  'flex items-center gap-3 px-3 py-3 rounded-lg font-medium',
-                  isActive
-                    ? 'bg-sidebar-primary text-sidebar-primary-foreground'
-                    : 'text-sidebar-foreground hover:bg-sidebar-accent'
-                )
-              }
-            >
-              <Icon className="w-5 h-5 shrink-0" />
-              {expanded && (
-                <span className="whitespace-nowrap">
-                  {link.label}
-                </span>
-              )}
-            </NavLink>
-          );
-        })}
-      </nav>
-
-      {!isClinic && expanded && (
-        <div className="p-3 border-t border-sidebar-border">
-          <div className="glass-card p-3">
-            <div className="flex items-center gap-3">
-              <Smartphone className="w-4 h-4 text-primary" />
-              <div>
-                <p className="text-sm font-medium">Device Status</p>
-                <p className="text-xs text-success">Connected</p>
-              </div>
+      {/* Mobile Drawer */}
+      <Sheet open={mobileDrawerOpen} onOpenChange={setMobileDrawerOpen}>
+        <SheetContent 
+          side="left" 
+          className="w-72 p-0 bg-sidebar border-r border-sidebar-border"
+        >
+          <div className="flex flex-col h-full">
+            {/* Header */}
+            <div className="flex items-center justify-between p-4 border-b border-sidebar-border">
+              <span className="font-semibold text-sidebar-foreground">Menu</span>
+              <Button 
+                variant="ghost" 
+                size="icon" 
+                onClick={closeMobileDrawer}
+                className="text-sidebar-foreground"
+              >
+                <X className="w-5 h-5" />
+              </Button>
             </div>
+
+            {/* Navigation */}
+            <SidebarNavContent
+              links={links}
+              isClinic={isClinic}
+              expanded={true}
+              onNavClick={closeMobileDrawer}
+            />
           </div>
-        </div>
-      )}
-    </aside>
+        </SheetContent>
+      </Sheet>
+    </>
   );
 };
